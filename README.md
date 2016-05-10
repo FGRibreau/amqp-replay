@@ -5,8 +5,7 @@ Replay messages from (RabbitMQ) AMQP dead-letter queue
 
 ## Philosophy
 
-When you use AMQP dead-letter queue, you need to pass a...
-(todo, insert a screenshot from replay lecture here)
+![amqp-replay](https://cloud.githubusercontent.com/assets/138050/15161286/dced5818-16fd-11e6-95db-9a657000ed52.gif)
 
 ## Getting Started
 
