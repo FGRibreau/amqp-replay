@@ -18,6 +18,7 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/amqp-replay/issues"
   },
+  "keywords":["amqp", "replay"],
   "engines": {
     "node": "6"
   },
