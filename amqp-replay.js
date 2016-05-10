@@ -33,13 +33,15 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
         const fields = msg.fields;
         const properties = msg.properties;
         const content = msg.content;
-        logger.debug(" [x] Received '%s'", msg.content.toString());
-        exchangeCh.publish(config.amqp.exchange.name, fields.routingKey, content, properties);
+        logger.info('Replaying message', fields);
+        if(exchangeCh.publish(config.amqp.exchange.name, fields.routingKey, content, properties)){
+          queueCh.ack(msg);
+        }
       }, {
         noAck: config.amqp.noAck
       });
     })
-    .then(_consumeOk => logger.debug(' [*] Waiting for messages. To exit press CTRL+C'))
+    .then(_consumeOk => logger.debug('Waiting for messages. To exit press CTRL+C'))
     .otherwise(err => {
       logger.error('error', err);
       exit();
