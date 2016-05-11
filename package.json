@@ -1,6 +1,6 @@
 {
   "name": "amqp-replay",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Replay messages from (RabbitMQ) AMQP dead-letter queue",
   "main": "amqp-replay.js",
   "scripts": {
@@ -18,7 +18,10 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/amqp-replay/issues"
   },
-  "keywords":["amqp", "replay"],
+  "keywords": [
+    "amqp",
+    "replay"
+  ],
   "engines": {
     "node": "6"
   },
