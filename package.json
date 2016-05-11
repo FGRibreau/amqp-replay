@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "amqp-replay": "amqp-replay"
+    "amqp-replay": "amqp-replay.js"
   },
   "repository": {
     "type": "git",
