@@ -15,9 +15,15 @@ npm i amqp-replay -g
 AMQP_URI="amqp://user:password@rabbitmq.ndd.com:5672/%2F" AMQP_QUEUE_NAME="social.test" AMQP_EXCHANGE_NAME="fgtest" amqp-replay
 ```
 
-## Donate
+## Development sponsored by iAdvize
 
-I maintain this project in my free time, if it helped you please support my work [via paypal](https://paypal.me/FGRibreau), thanks a lot!
+<p align="center">
+<a target="_blank" href="https://vimeo.com/121470910"><img style="width:100%" src="https://i.vimeocdn.com/video/509763980.png?mw=638&mh=1080&q=70"></a>
+</p>
+
+I work at [iAdvize](http://iadvize.com) as a Lead Developer and Architect. iAdvize is the **leading real-time customer engagement platform in Europe** and is used in 40 different countries. We are one of the french startup with the [fastest growth](http://www.iadvize.com/fr/wp-content/uploads/sites/2/2014/11/CP-Fast-50.pdf) and one of [the **greatest place to work** in **France**](https://vimeo.com/122438055).
+
+We are looking for a [**NodeJS backend developer**](http://smrtr.io/FqP79g), a [Scala backend developer](http://smrtr.io/FqP79g), a [**JavaScript frontend developer**](http://smrtr.io/wR-y4Q), a [Full-stack Developer](http://smrtr.io/SGhrew) and a [DevOps System Engineer](http://smrtr.io/OIFFMQ) in Paris or Nantes. **[Send me a tweet](https://twitter.com/FGRibreau) if you have any questions**!
 
 ## License
 
