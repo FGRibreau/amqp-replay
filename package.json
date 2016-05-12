@@ -4,7 +4,8 @@
   "description": "Replay messages from (RabbitMQ) AMQP dead-letter queue",
   "main": "amqp-replay.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node amqp-replay.js"
   },
   "bin": {
     "amqp-replay": "bin/amqp-replay"
