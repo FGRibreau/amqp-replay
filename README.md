@@ -10,24 +10,23 @@ Replay messages from (RabbitMQ) AMQP dead-letter queue
 ## Getting Started
 
 
-### Setup with Docker
+##### Setup with Docker
 
 ```
 # add this to your [bash|zsh]rc and source it
 function amqp-replay(){
   docker run -it -e AMQP_URI=$AMQP_URI -e AMQP_QUEUE_NAME=$AMQP_QUEUE_NAME -e AMQP_QUEUE_NOACK=$AMQP_QUEUE_NOACK -e AMQP_EXCHANGE_NAME=$AMQP_EXCHANGE_NAME --rm fgribreau/amqp-replay:v0.1.0
 }
-
 ```
 
 
-### Setup with Node
+##### Setup with Node
 
 ```
 npm i amqp-replay -g
 ```
 
-### Run it
+##### Run it
 
 ```
 AMQP_URI="amqp://user:password@rabbitmq.ndd.com:5672/%2F" AMQP_QUEUE_NAME="social.test" AMQP_EXCHANGE_NAME="fgtest" amqp-replay
