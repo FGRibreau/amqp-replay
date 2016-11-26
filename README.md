@@ -1,6 +1,6 @@
 # amqp-replay
 
-[![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/fgribreau?utm_source=github&utm_medium=button&utm_term=fgribreau&utm_campaign=github) 
+[![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/francois-guillaume-ribreau?utm_source=github&utm_medium=button&utm_term=francois-guillaume-ribreau&utm_campaign=github) 
 
 Replay messages from (RabbitMQ) AMQP dead-letter queue
 
