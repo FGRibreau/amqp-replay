@@ -12,7 +12,8 @@ const config = env.getOrElseAll({
       noAck: false
     },
     exchange: {
-      name: 'exchange-to-publish'
+      name: 'exchange-to-publish',
+      overrideRoutingKey: '' //If empty, do not override
     }
   }
 });
@@ -33,8 +34,9 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
         const fields = msg.fields;
         const properties = msg.properties;
         const content = msg.content;
-        logger.info('Replaying message', fields);
-        if(exchangeCh.publish(config.amqp.exchange.name, fields.routingKey, content, properties)){
+        const routingKey = config.amqp.exchange.overrideRoutingKey === '' ? fields.routingKey : config.amqp.exchange.overrideRoutingKey;
+        logger.info(`Replaying message with rk ${routingKey}`, fields);
+        if(exchangeCh.publish(config.amqp.exchange.name, routingKey, content, properties)){
           queueCh.ack(msg);
         }
       }, {
