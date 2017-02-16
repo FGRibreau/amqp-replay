@@ -39,7 +39,7 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
         const properties = msg.properties;
         const content = msg.content;
         const routingKey = config.amqp.exchange.routingKey === '' ? fields.routingKey : config.amqp.exchange.routingKey;
-        logger.info(`Replaying message with rk ${routingKey}`, fields);
+        logger.info(`Replaying message (routing-key=${routingKey})`, fields);
         if(exchangeCh.publish(config.amqp.exchange.name, routingKey, content, properties)){
           queueCh.ack(msg);
         }
