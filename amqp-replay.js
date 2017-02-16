@@ -8,12 +8,16 @@ const config = env.getOrElseAll({
   amqp: {
     uri: 'amqp://guest:guest@localhost:5672/%2F',
     queue: {
-      name: 'dead-letter-queue',
+      name: { //dead letter queue to read from
+        $type: env.types.String
+      },
       noAck: false
     },
     exchange: {
-      name: 'exchange-to-publish',
-      overrideRoutingKey: '' //If empty, do not override
+      name: { //exchange to publish
+        $type: env.types.String
+      },
+      routingKey: '' //If empty, do not override
     }
   }
 });
@@ -34,7 +38,7 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
         const fields = msg.fields;
         const properties = msg.properties;
         const content = msg.content;
-        const routingKey = config.amqp.exchange.overrideRoutingKey === '' ? fields.routingKey : config.amqp.exchange.overrideRoutingKey;
+        const routingKey = config.amqp.exchange.routingKey === '' ? fields.routingKey : config.amqp.exchange.routingKey;
         logger.info(`Replaying message with rk ${routingKey}`, fields);
         if(exchangeCh.publish(config.amqp.exchange.name, routingKey, content, properties)){
           queueCh.ack(msg);
