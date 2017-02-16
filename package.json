@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/FGRibreau/amqp-replay#readme",
   "dependencies": {
-    "amqplib": "^0.4.1",
+    "amqplib": "^0.5.0",
     "common-env": "^5.2.1",
     "when": "^3.7.7",
     "winston": "^2.2.0",
