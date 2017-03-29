@@ -52,6 +52,7 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
         return queueCh.get(config.amqp.queue.name, {noAck: config.amqp.noAck})
           .then(newVal => {
             // `get` return false when no messages are available in queue
+            // we will also stop if maxBufferSize is reached
             const shouldStop = newVal === false || res.length >= config.maxBufferSize;
             if (shouldStop) {
               return res;
