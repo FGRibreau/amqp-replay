@@ -1,6 +1,6 @@
 # amqp-replay
 
-[![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/francois-guillaume-ribreau?utm_source=github&utm_medium=button&utm_term=francois-guillaume-ribreau&utm_campaign=github) 
+[![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/francois-guillaume-ribreau?utm_source=github&utm_medium=button&utm_term=francois-guillaume-ribreau&utm_campaign=github)
 
 Replay messages from (RabbitMQ) AMQP dead-letter queue
 
@@ -17,7 +17,7 @@ Replay messages from (RabbitMQ) AMQP dead-letter queue
 ```
 # add this to your [bash|zsh]rc and source it
 function amqp-replay(){
-  docker run -it -e AMQP_URI=$AMQP_URI -e AMQP_QUEUE_NAME=$AMQP_QUEUE_NAME -e AMQP_QUEUE_NOACK=$AMQP_QUEUE_NOACK -e AMQP_EXCHANGE_NAME=$AMQP_EXCHANGE_NAME --rm fgribreau/amqp-replay:v0.1.0
+  docker run -it -e AMQP_URI=$AMQP_URI -e AMQP_QUEUE_NAME=$AMQP_QUEUE_NAME -e AMQP_QUEUE_NOACK=$AMQP_QUEUE_NOACK -e AMQP_EXCHANGE_NAME=$AMQP_EXCHANGE_NAME --rm fgribreau/amqp-replay
 }
 ```
 
@@ -33,6 +33,8 @@ npm i amqp-replay -g
 ```
 AMQP_URI="amqp://user:password@rabbitmq.ndd.com:5672/%2F" AMQP_QUEUE_NAME="social.test" AMQP_EXCHANGE_NAME="fgtest" amqp-replay
 ```
+
+You can add `INFINITE=true` for an infinite replay of the queue.
 
 ## Development sponsored by iAdvize
 
