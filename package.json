@@ -1,6 +1,6 @@
 {
   "name": "amqp-replay",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Replay messages from (RabbitMQ) AMQP dead-letter queue",
   "main": "amqp-replay.js",
   "scripts": {
