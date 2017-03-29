@@ -5,20 +5,21 @@ const when = require('when');
 logger.setLevels(logger.config.syslog.levels);
 const env = require('common-env/withLogger')(logger);
 const config = env.getOrElseAll({
-  infinite: false, //Whether to replay queue infinitely, or only once
+  infinite: false, // whether to replay queue infinitely, or only once
+  bufferLimit: 10000, // in case of finite execution, no more than this max number will be processed
   amqp: {
     uri: 'amqp://guest:guest@localhost:5672/%2F',
     queue: {
-      name: { //dead letter queue to read from
+      name: { // dead letter queue to read from
         $type: env.types.String
       },
       noAck: false
     },
     exchange: {
-      name: { //exchange to publish
+      name: { // exchange to publish
         $type: env.types.String
       },
-      routingKey: '' //If empty, do not override
+      routingKey: '' // if empty, do not override
     }
   }
 });
@@ -50,7 +51,8 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
       function getAllMessagesInQueue(res = []) {
         return queueCh.get(config.amqp.queue.name, {noAck: config.amqp.noAck})
           .then(newVal => {
-            if (newVal === false) {
+            const shouldStop = newVal === false || res.length >= config.bufferLimit;
+            if (shouldStop) {
               return res;
             }
 
@@ -60,11 +62,11 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
       }
 
       if (config.infinite) {
-        //replay all messages in queue, infinitely
+        // replay all messages in queue, infinitely
         return queueCh.consume(config.amqp.queue.name, handleMessage, {noAck: config.amqp.noAck})
           .then(_consumeOk => logger.debug('Waiting for messages. To exit press CTRL+C'))
       } else {
-        //Get all messages currently in queue, and exit once they are replay
+        // get all messages currently in queue, and exit once they are replay
         return getAllMessagesInQueue().then(messages => {
           messages.forEach(handleMessage);
 
