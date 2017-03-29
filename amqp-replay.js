@@ -6,7 +6,7 @@ logger.setLevels(logger.config.syslog.levels);
 const env = require('common-env/withLogger')(logger);
 const config = env.getOrElseAll({
   infinite: false, // whether to replay queue infinitely, or only once
-  bufferLimit: 10000, // in case of finite execution, no more than this max number will be processed
+  maxBufferSize: 10000, // in case of finite execution, no more than this max number will be processed
   amqp: {
     uri: 'amqp://guest:guest@localhost:5672/%2F',
     queue: {
@@ -51,13 +51,13 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
       function getAllMessagesInQueue(res = []) {
         return queueCh.get(config.amqp.queue.name, {noAck: config.amqp.noAck})
           .then(newVal => {
-            const shouldStop = newVal === false || res.length >= config.bufferLimit;
+            // `get` return false when no messages are available in queue
+            const shouldStop = newVal === false || res.length >= config.maxBufferSize;
             if (shouldStop) {
               return res;
             }
 
-            res.push(newVal);
-            return getAllMessagesInQueue(res);
+            return getAllMessagesInQueue(res.concat([newVal]));
           });
       }
 
