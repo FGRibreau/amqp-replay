@@ -5,6 +5,7 @@ const when = require('when');
 logger.setLevels(logger.config.syslog.levels);
 const env = require('common-env/withLogger')(logger);
 const config = env.getOrElseAll({
+  infinite: false, //Whether to replay queue infinitely, or only once
   amqp: {
     uri: 'amqp://guest:guest@localhost:5672/%2F',
     queue: {
@@ -26,15 +27,16 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
   const exit = () => conn.close();
   process.once('SIGINT', exit);
 
-  const queueCh = conn.createChannel();
-  const exchangeCh = conn.createChannel();
+  const queueCh = conn.createConfirmChannel();
+  const exchangeCh = conn.createConfirmChannel();
 
   const queueOk = queueCh.then(ch => ch.checkQueue(config.amqp.queue.name));
   const exchangeOk = exchangeCh.then(ch => ch.checkExchange(config.amqp.exchange.name));
 
   when.join(queueCh, queueOk, exchangeCh, exchangeOk)
     .spread(function(queueCh, queueOk, exchangeCh, exchangeOk) {
-      return queueCh.consume(config.amqp.queue.name, function(msg) {
+
+      function handleMessage(msg) {
         const fields = msg.fields;
         const properties = msg.properties;
         const content = msg.content;
@@ -43,13 +45,39 @@ require('amqplib').connect(config.amqp.uri).then(function(conn) {
         if(exchangeCh.publish(config.amqp.exchange.name, routingKey, content, properties)){
           queueCh.ack(msg);
         }
-      }, {
-        noAck: config.amqp.noAck
-      });
+      }
+
+      function getAllMessagesInQueue(res = []) {
+        return queueCh.get(config.amqp.queue.name, {noAck: config.amqp.noAck})
+          .then(newVal => {
+            if (newVal === false) {
+              return res;
+            }
+
+            res.push(newVal);
+            return getAllMessagesInQueue(res);
+          });
+      }
+
+      if (config.infinite) {
+        //replay all messages in queue, infinitely
+        return queueCh.consume(config.amqp.queue.name, handleMessage, {noAck: config.amqp.noAck})
+          .then(_consumeOk => logger.debug('Waiting for messages. To exit press CTRL+C'))
+      } else {
+        //Get all messages currently in queue, and exit once they are replay
+        return getAllMessagesInQueue().then(messages => {
+          messages.forEach(handleMessage);
+
+          return when.join(queueCh.waitForConfirms(), exchangeCh.waitForConfirms());
+        })
+        .then(_consumeOk => {
+          console.log('Replayed all messages once.');
+          conn.close();
+        })
+      }
     })
-    .then(_consumeOk => logger.debug('Waiting for messages. To exit press CTRL+C'))
     .otherwise(err => {
-      logger.error('error', err);
-      exit();
+      console.error('error', err);
+      exit(1);
     });
-}).then(null, console.warn);
+}).done(null, console.warn);
